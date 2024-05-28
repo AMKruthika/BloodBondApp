@@ -17,10 +17,11 @@ export default function ProfileDashboard() {
         return state.profiles.singleProfile
     })
     console.log('profile length',Profiles?.length)
+    console.log('Profile',Profiles)
     useEffect(()=>
         {
             dispatch(startFetchingUserProfile())
-        },[])
+        },[dispatch])
         ///
 
     const handleProfileClick = () => {

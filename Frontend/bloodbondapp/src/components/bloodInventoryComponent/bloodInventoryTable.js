@@ -45,7 +45,7 @@ bloodInventoryDispatch({type:'SET_SERVER_ERRORS',payload:err.response.data.error
             <Row>
                 {bloodInventory.bloodInventoryDetails.length>0?(bloodInventory.bloodInventoryDetails.map((Blood)=>{
                     return <Col md={6} className="mb-4" key={Blood._id}>
-                    <Card className="bg-danger text-white">
+                    <Card className="bg-danger text-black">
                         <Card.Body>
                             <Card.Title>Blood Group:{Blood.blood.bloodGroup}</Card.Title>
                             <Card.Text>
@@ -56,11 +56,11 @@ bloodInventoryDispatch({type:'SET_SERVER_ERRORS',payload:err.response.data.error
                                 <strong>Status:</strong>{Blood.status}
                             </Card.Text>
                             <div>
-                            <Button className='btn btn-light' style={{ marginRight: '10px' }} onClick={()=>{
+                            <Button className='btn btn-dark' style={{ marginRight: '10px' }} onClick={()=>{
                                 setEditBlood(Blood)
                                 toggle()}
                                 }><PencilSquare/>Edit</Button>
-                            <Button className='btn btn-light' style={{ marginLeft: '10px' }} onClick={()=>{handleDelete(Blood._id)}}><Trash/>Delete</Button>
+                            <Button className='btn btn-dark' style={{ marginLeft: '10px' }} onClick={()=>{handleDelete(Blood._id)}}><Trash/>Delete</Button>
                             </div>
                         </Card.Body>
                     </Card>

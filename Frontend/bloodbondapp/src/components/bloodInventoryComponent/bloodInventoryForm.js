@@ -95,7 +95,7 @@ export default function BloodInventoryForm({editBlood,toggle}){
             <Container>
             <Row className="justify-content-center">
                 <Col md={6}>
-                <Card className="bg-danger text-white">
+                <Card className="bg-danger text-black">
                 <Card.Body>
                     <Card.Title>BloodInventory Form</Card.Title>
                     <form onSubmit={handleSubmit}>
@@ -177,7 +177,7 @@ export default function BloodInventoryForm({editBlood,toggle}){
                             name="status"/>
                             <label htmlFor="expired">expired</label>
                             </div>
-                        <input type='submit' className='btn btn-light'/>
+                        <input type='submit' className='btn btn-dark'/>
                     </form>
                 </Card.Body>
             </Card>

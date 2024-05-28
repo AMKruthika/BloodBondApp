@@ -7,6 +7,7 @@ import BloodInventoryTable from './components/bloodInventoryComponent/bloodInven
 import BloodBankDashboard from './components/bloodbankComponent/bloodbankDashboard';
 import AdminDashboard from './components/adminComponent/adminDashboard';
 import ProfileDashboard from './components/userProfileComponent/profileDashboard';
+import BloodRequestsTable from './components/bloodbankComponent/bloodRequestsTable';
 import './App.css';
 import {Routes,Route,Link} from 'react-router-dom'
 import { useReducer } from 'react';
@@ -43,6 +44,7 @@ const [bloodInventory,bloodInventoryDispatch]=useReducer(bloodInventoryReducer,b
         <Route path='/bloodbank/dashboard' element={<BloodBankDashboard/>}/>
         <Route path="/bloodbank/:id/blood-inventory-form" element={<BloodInventoryForm/>} />
         <Route path="/bloodbank/:id/show-inventory" element={<BloodInventoryTable/>} />
+        <Route path="/requests" element={<BloodRequestsTable/>}/>
         <Route path='/user/dashboard' element={<ProfileDashboard/>}/>
         <Route path='/admin/dashboard' element={<AdminDashboard/>}/>
       </Routes>):

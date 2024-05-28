@@ -53,6 +53,7 @@ export const startFetchingProfile=()=>{
                         Authorization:localStorage.getItem('token')
                     }
                 })
+                console.log("response", response.data)
                 dispatch(displayUserProfile(response.data))
                 console.log(" user profile",response.data)
             }
