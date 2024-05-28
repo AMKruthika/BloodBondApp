@@ -27,6 +27,7 @@ const bloodRequestCltr=require('./app/controllers/blood-request-controller')
 const userProfilecltr=require('./app/controllers/users-profile-controller')
 const bloodBankCtrlr=require('./app/controllers/bloodBankController')
 const bloodInventoryCtrlr=require('./app/controllers/bloodInventoryController')
+const invoiceCtrlr=require('./app/controllers/invoiceController')
 
 //2)***(VALIDATORS)***//
 
@@ -40,6 +41,7 @@ const userProfileValidationSchema=require('./app/validators/userProfile-validati
 const reviewValidationSchema=require('./app/validators/review-validation-schema')
 const {bloodBankValidationSchema,approvalStatusValidationSchema}=require('./app/validators/bloodBankValidations')
 const bloodInventoryValidationSchema=require('./app/validators/bloodInventoryValidations')
+const invoiceValidationSchema=require('./app/validators/invoiceValidations')
 
 
 //3)***(AUTHENTICATION && AUTHORIZATION)***//
@@ -66,7 +68,7 @@ app.put('/api/user/profile/:id',authenticateUser,authorizeUser(['user']),checkSc
 //ROUTE FOR BLOOD-REQUEST(CRUD)
 app.post('/api/blood/request',authenticateUser,authorizeUser(['user']),checkSchema(bloodRequestValidationSchema),bloodRequestCltr.create)
 app.get('/api/blood/request',authenticateUser,authorizeUser(['user']),bloodRequestCltr.display)
-app.get('/api/blood/request/list',authenticateUser,authorizeUser(['user']),bloodRequestCltr.list)
+app.get('/api/blood/request/list',authenticateUser,authorizeUser(['bloodbank']),bloodRequestCltr.list)
 app.put('/api/blood/request/:id',authenticateUser,authorizeUser(['user']),checkSchema(bloodRequestValidationSchema),bloodRequestCltr.update)
 app.delete('/api/blood/request/:id',authenticateUser,authorizeUser(['user']),bloodRequestCltr.delete)
 
@@ -84,6 +86,9 @@ app.post('/api/bloodinventries/:id',authenticateUser,authorizeUser(['bloodbank']
 app.get('/api/bloodinventries/:id',authenticateUser,authorizeUser(['bloodbank']),bloodInventoryCtrlr.list)
 app.delete('/api/bloodinventries/:id',authenticateUser,authorizeUser(['bloodbank']),bloodInventoryCtrlr.delete)
 app.put('/api/bloodinventries/:id',authenticateUser,authorizeUser(['bloodbank']),checkSchema(bloodInventoryValidationSchema),bloodInventoryCtrlr.update)
+
+//ROUTES FOR INVOICE
+app.post('/api/invoices/:requestId',authenticateUser,authorizeUser(['bloodbank']),checkSchema(invoiceValidationSchema),invoiceCtrlr.create)
 app.listen(port,()=>
 {
     console.log('Blood-Bond-App is successfully running on the port',port)

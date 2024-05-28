@@ -53,6 +53,7 @@ userProfilecltr.display=async(req,res)=>
 {
     try{
     const profile=await Profile.find()
+    console.log(profile)
     res.json(profile)
     }
     catch(err)
@@ -66,13 +67,19 @@ userProfilecltr.display=async(req,res)=>
 //to display particular user profile
 userProfilecltr.show=async(req,res)=>
 {
-    const profile=await Profile.findOne({user:req.user.id})
+    try{
+        const profile=await Profile.find({user:req.user.id})
     console.log(profile)
     if(!profile)
     {
         throw new Error('profile not found')
     }
-    res.json(profile)
+    res.status(201).json(profile)
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).json({error:'Internal server error'})
+    }
 
 }
 
@@ -95,7 +102,7 @@ userProfilecltr.update=async(req,res)=>
         if(profile.user==req.user.id)
         {
         const updatedProfile=await Profile.findByIdAndUpdate(id,body,{new:true,runValidators:true})
-        res.json(updatedProfile)
+        res.status(201).json(updatedProfile)
         console.log(updatedProfile) 
         }
         else{
