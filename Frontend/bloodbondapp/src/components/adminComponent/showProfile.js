@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { startFetchingProfile } from "../../actions/userprofileActions"
 
 export default function ShowProfiles() {
-  const dispatch = useDispatch();
-  const profileDisplayData = useSelector(state => state.profiles.profileDisplayData);
-  const serverErrors = useSelector(state => state.profiles.serverErrors);
+  const dispatch =useDispatch()
+  const profileDisplayData = useSelector(state => state.profiles.profileDisplayData)
+  const serverErrors = useSelector(state => state.profiles.serverErrors)
 
   useEffect(() => {
     // Fetch profile data when the component mounts
-    dispatch(startFetchingProfile());
+    dispatch(startFetchingProfile())
   }, [dispatch])
 
   console.log("Profile Display Data:", profileDisplayData); // Log profile data for debugging
@@ -52,5 +52,9 @@ export default function ShowProfiles() {
         </div>
       )}
     </div>
-  );
+  )
+
 }
+
+
+

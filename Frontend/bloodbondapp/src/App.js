@@ -1,9 +1,14 @@
-import {useState} from 'react'
+import { useState, useReducer } from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
+
 import UserContainer from './components/userComponent/userContainer';
-import UserRegistrationForm from './components/userComponent/userRegistrationForm';
 import UserLoginForm from './components/userComponent/userLoginForm';
+import BloodBankDashboard from './components/bloodbankComponent/bloodbankDashboard';
+import ProfileDashboard from './components/userProfileComponent/profileDashboard';
+import AdminDashboard from './components/adminComponent/adminDashboard';
 import BloodInventoryForm from './components/bloodInventoryComponent/bloodInventoryForm';
 import BloodInventoryTable from './components/bloodInventoryComponent/bloodInventoryTable';
+
 import BloodBankDashboard from './components/bloodbankComponent/bloodbankDashboard';
 import AdminDashboard from './components/adminComponent/adminDashboard';
 import ProfileDashboard from './components/userProfileComponent/profileDashboard';
@@ -14,45 +19,76 @@ import { useReducer } from 'react';
 import userReducer from './reducers/userReducer';
 import UserContext from './contexts/userContext';
 
-import BloodInventoryContext from './contexts/bloodInventoryContext';
+
+//
+import BloodRequestForm from './components/userProfileComponent/blood-requestForm';
+import bloodRequestReducer from './reducers/bloodRequestReducer';
+import BloodRequestContext from './contexts/bloodRequestContext';
+
+import './App.css';
+
+import userReducer from './reducers/userReducer';
 import bloodInventoryReducer from './reducers/bloodInventoryReducer';
+
+import UserContext from './contexts/userContext';
+import BloodInventoryContext from './contexts/bloodInventoryContext';
+
 function App() {
-  const userinitialstate={
-    userDetails:[],
-    registerData:[],
-    loginData:[],
-    serverErrors:[],
-  }
-  const bloodinventoryinitialstate={
-    bloodInventoryDetails:[],
+  const userInitialState = {
+    userDetails: [],
+    registerData: [],
+    loginData: [],
+    serverErrors: [],
+  };
+
+  const bloodInventoryInitialState = {
+    bloodInventoryDetails: [],
+    serverErrors: [],
+  };
+
+  //
+  const bloodRequestInitialState={
+    bloodRequests:[],
+    userBloodRequests:[],
     serverErrors:[]
   }
-const [users,userDispatch]=useReducer(userReducer,userinitialstate)
-const [bloodInventory,bloodInventoryDispatch]=useReducer(bloodInventoryReducer,bloodinventoryinitialstate)
-  const [showRegistrationForm,setShowRegistrationForm]=useState(false)
-  const handleShowRegistration=()=>{
-    setShowRegistrationForm(!showRegistrationForm)
-  }
+  const [users, userDispatch] = useReducer(userReducer, userInitialState);
+  const [bloodInventory, bloodInventoryDispatch] = useReducer(bloodInventoryReducer, bloodInventoryInitialState);
+  //
+  const[bloodRequests,bloodRequestDispatch]=useReducer(bloodRequestReducer,bloodRequestInitialState)
+
+  const [showRegistrationForm, setShowRegistrationForm] = useState(false);
+
+  const handleShowRegistration = () => {
+    setShowRegistrationForm(!showRegistrationForm);
+  };
+
   return (
-    <UserContext.Provider value={{users,userDispatch}}>
-    <BloodInventoryContext.Provider value={{bloodInventory,bloodInventoryDispatch}}>
-    <div className="App">
-      <h1>BloodBond App</h1>
-      {showRegistrationForm?(<Routes>
-        <Route path='/register' element={<UserContainer/>}/>
-        <Route path='/login' element={<UserLoginForm col-md-6/>}/>
-        <Route path='/bloodbank/dashboard' element={<BloodBankDashboard/>}/>
-        <Route path="/bloodbank/:id/blood-inventory-form" element={<BloodInventoryForm/>} />
-        <Route path="/bloodbank/:id/show-inventory" element={<BloodInventoryTable/>} />
-        <Route path="/requests" element={<BloodRequestsTable/>}/>
-        <Route path='/user/dashboard' element={<ProfileDashboard/>}/>
-        <Route path='/admin/dashboard' element={<AdminDashboard/>}/>
-      </Routes>):
-      (<Link to='/register' onClick={handleShowRegistration}>Register Now</Link>)}
-    </div>
-    </BloodInventoryContext.Provider>
+    <UserContext.Provider value={{ users, userDispatch }}>
+      <BloodInventoryContext.Provider value={{ bloodInventory, bloodInventoryDispatch }}>
+        <BloodRequestContext.Provider value={{bloodRequests,bloodRequestDispatch}}>
+        <div className="App">
+          <h1>BloodBond App</h1>
+          {showRegistrationForm ? (
+            <Routes>
+              <Route path='/register' element={<UserContainer />} />
+              <Route path='/login' element={<UserLoginForm />} />
+              <Route path='/bloodbank/dashboard' element={<BloodBankDashboard />} />
+              <Route path="/bloodbank/:id/blood-inventory-form" element={<BloodInventoryForm />} />
+              //
+              {/* <Route path="/user/:id/blood-request-form" element={<BloodRequestForm/>}/> */}
+              <Route path="/bloodbank/:id/show-inventory" element={<BloodInventoryTable />} />
+              <Route path='/user/dashboard' element={<ProfileDashboard />} />
+              <Route path='/admin/dashboard' element={<AdminDashboard />} />
+            </Routes>
+          ) : (
+            <Link to='/register' onClick={handleShowRegistration}>Register Now</Link>
+          )}
+        </div>
+        </BloodRequestContext.Provider>
+      </BloodInventoryContext.Provider>
+
     </UserContext.Provider>
-    
   );
 }
 

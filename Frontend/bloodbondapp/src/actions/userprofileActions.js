@@ -10,20 +10,17 @@ export const startAddProfile=(form,clearForm)=>{
                 }
                
             })
-            console.log('response',response.data)
             dispatch(AddProfile(response.data))
             dispatch(setServerError([]))
             clearForm()
             console.log('cleared form',form)
         }catch(err){
-            
-            if (err.response && err.response.data && err.response.data.errors) {
-                console.log(err)
-                dispatch(setServerError(err.response.data.errors))         
-            }
+            console.log(err)
+            dispatch(setServerError(err.response.data.errors))
+        }
     }
 }
-}
+
 //DISPLAY PROFILES FOR ADMIN
 
 export const startFetchingProfile=()=>{
@@ -58,16 +55,56 @@ export const startFetchingProfile=()=>{
                 console.log(" user profile",response.data)
             }
         catch(err){
-            if (err.response && err.response.data && err.response.data.errors) {
                 console.log(err)
                 dispatch(setServerError(err.response.data.errors))         
-            }
-                
     } 
             }
-    }
+        }
     
+//DELETING HIS PROFILE
 
+export const startDeletingUserProfile=(id)=>
+    {
+        return async(dispatch)=>{
+            try{
+                const response=await axios.delete(`http://localhost:3080/api/user/profile/${id}`,{
+                    headers:{
+                        Authorization:localStorage.getItem('token')
+                    }
+                })
+                dispatch(deleteUserProfile(response.data))
+                console.log(" deleted user profile",response.data)
+            }
+        catch(err){
+                console.log(err)
+                dispatch(setServerError(err.response.data.errors))         
+    } 
+            }
+        }
+
+//EDITING USER PROFILE
+
+export const startEditingUserProfile = (id, form, clearForm) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.put(`http://localhost:3080/api/user/profile/${id}`, form, {
+                headers: {
+                   
+                    Authorization: localStorage.getItem('token')
+                }
+            });
+            dispatch(editUserProfile(response.data));
+            dispatch(setServerError([]));
+            clearForm();
+            console.log('edited user profile', form);
+        } catch (err) {
+            console.log(err);
+            dispatch(setServerError(err.response.data.errors));
+        }
+    };
+};
+    
+//ADDING USER PROFILE 
 
 const AddProfile = (data) => {
     return {
@@ -76,7 +113,7 @@ const AddProfile = (data) => {
     };
 };
 
-//DISPLAY IT TO ADMIN
+//DISPLAYING PROFILE TO ADMIN
 
 const displayProfile=(data)=>{
     return {
@@ -85,6 +122,7 @@ const displayProfile=(data)=>{
     }
 }
 
+// DISPLAYING PROFILE TO USER
 const displayUserProfile=(data)=>
     {
         return{
@@ -93,9 +131,30 @@ const displayUserProfile=(data)=>
         }
     }
 
+// DELETING USER PROFILE
+
+const deleteUserProfile=(data)=>
+    {
+        return{
+            type:'DELETE_USER_PROFILE',
+            payload:data
+            
+        }
+    }
+
+//EDITING USER PROFILE
+
+const editUserProfile = (data) => {
+    return {
+        type: 'EDIT_USER_PROFILE',
+        payload: data
+    };
+};
+//SERVER ERRORS
+
 const setServerError = (errors) => {
     return {
         type: 'SET_SERVER_ERRORS',
         payload: errors
-    }
-}
+    };
+};

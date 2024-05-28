@@ -9,8 +9,9 @@ const axios=require('axios')
 const port=3080
 app.use(express.json())
 app.use(cors())
-
+//i merged changes
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+
 
 //DB CONNECTION
 const configureDB=require('./config/db')
@@ -36,12 +37,21 @@ const bloodRequestValidationSchema=require('./app/validators/bloodRequest-valida
 //IMPORTING USER-VALIDATION-SCHEMA
 const {userRegisterValidationSchema,userLoginValidationSchema}=require('./app/validators/user-validation-schema')
 //IMPORTING USERPROFILE-VALIDATION-SCEHMA
-const userProfileValidationSchema=require('./app/validators/userProfile-validation-schema')
+const {userProfileValidationSchema,updateProfileValidationSchema}=require('./app/validators/userProfile-validation-schema')
 //IMPORTING REVIEW VALIDATION-SCHEMA
 const reviewValidationSchema=require('./app/validators/review-validation-schema')
 const {bloodBankValidationSchema,approvalStatusValidationSchema}=require('./app/validators/bloodBankValidations')
 const bloodInventoryValidationSchema=require('./app/validators/bloodInventoryValidations')
 const invoiceValidationSchema=require('./app/validators/invoiceValidations')
+
+
+//IMPORTING RESPONSE VALIDATION-SCHEMA
+
+const responseValidationSchema=require('./app/validators/responseValidation')
+
+//IMPORTING RESPONSE CONTROLLER
+
+const responseCtrl=require('./app/controllers/response-controller')
 
 
 //3)***(AUTHENTICATION && AUTHORIZATION)***//
@@ -63,14 +73,26 @@ app.post('/api/user/profile',authenticateUser,authorizeUser(['user']),checkSchem
 app.get('/api/user/profiles',authenticateUser,authorizeUser(['admin']),userProfilecltr.display)
 app.get('/api/user/profile',authenticateUser,authorizeUser(['user']),userProfilecltr.show)
 app.delete('/api/user/profile/:id',authenticateUser,authorizeUser(['user']),userProfilecltr.delete)
-app.put('/api/user/profile/:id',authenticateUser,authorizeUser(['user']),checkSchema(userProfileValidationSchema),userProfilecltr.update)
+app.put('/api/user/profile/:id',authenticateUser,authorizeUser(['user']),checkSchema(updateProfileValidationSchema),userProfilecltr.update)
 
 //ROUTE FOR BLOOD-REQUEST(CRUD)
 app.post('/api/blood/request',authenticateUser,authorizeUser(['user']),checkSchema(bloodRequestValidationSchema),bloodRequestCltr.create)
+
 app.get('/api/blood/request',authenticateUser,authorizeUser(['user']),bloodRequestCltr.display)
 app.get('/api/blood/request/list',authenticateUser,authorizeUser(['bloodbank']),bloodRequestCltr.list)
+
+app.get('/api/blood/request',authenticateUser,authorizeUser(['user']),bloodRequestCltr.display) //this is for particular user who loges in[address]
+app.get('/api/blood/request/list',authenticateUser,authorizeUser(['user']),bloodRequestCltr.list) //this is for the request type is user
+app.get('/api/blood/request',authenticateUser,authorizeUser(['bloodbank'])) // this is for bloodrequest for particular bloodbank who loges in[address]
+app.get('/api/blood/request/list'),authenticateUser,authorizeUser(['bloodbank']) //this is for request type is bloodbank[doubt]
+
 app.put('/api/blood/request/:id',authenticateUser,authorizeUser(['user']),checkSchema(bloodRequestValidationSchema),bloodRequestCltr.update)
 app.delete('/api/blood/request/:id',authenticateUser,authorizeUser(['user']),bloodRequestCltr.delete)
+
+app.get('/api/blood/request/user',authenticateUser,authorizeUser(['user']),bloodRequestCltr.listHisRequest) //to see request made by him(his request)
+
+//For Admin
+app.get('/api/blood/requests',authenticateUser,authorizeUser(['admin']),bloodRequestCltr.admin)
 
 //ROUTES FOR BLOODBANK MODEL
 app.post('/api/bloodbanks',authenticateUser,authorizeUser(['bloodbank']),upload.fields([{name:'license',maxCount:1},{name:'photos',maxCount:4}]),checkSchema(bloodBankValidationSchema),bloodBankCtrlr.create)
@@ -81,14 +103,29 @@ app.get('/api/bloodbanks/list',authenticateUser,authorizeUser(['admin','user']),
 app.get('/api/bloodbanks/display',authenticateUser,authorizeUser(['bloodbank']),bloodBankCtrlr.display)
 app.delete('/api/bloodbanks/remove/:id',authenticateUser,authorizeUser(['admin','bloodBank']),bloodBankCtrlr.delete)
 
+//Route for getting bloodbank req for bloodbank
+app.get('/api/bloodbanks/request',authenticateUser,authorizeUser(['bloodbank']),bloodRequestCltr.list)
+
 //ROUTES FOR BLOOD INVENTORY MODEL
 app.post('/api/bloodinventries/:id',authenticateUser,authorizeUser(['bloodbank']),checkSchema(bloodInventoryValidationSchema),bloodInventoryCtrlr.create)
+//i merged local and remote changes
+//RESPONSE added by admin
+
+app.post('/api/response',authenticateUser,authorizeUser(['admin']),checkSchema(responseValidationSchema),responseCtrl.createByAdmin)
+
+//RESPONSE EDITTED BY USER 
+
+app.put('/api/response/:id',authenticateUser,authorizeUser(['user']),checkSchema(responseValidationSchema),responseCtrl.userResponse)
+
+
 app.get('/api/bloodinventries/:id',authenticateUser,authorizeUser(['bloodbank']),bloodInventoryCtrlr.list)
 app.delete('/api/bloodinventries/:id',authenticateUser,authorizeUser(['bloodbank']),bloodInventoryCtrlr.delete)
 app.put('/api/bloodinventries/:id',authenticateUser,authorizeUser(['bloodbank']),checkSchema(bloodInventoryValidationSchema),bloodInventoryCtrlr.update)
 
+
 //ROUTES FOR INVOICE
 app.post('/api/invoices/:requestId',authenticateUser,authorizeUser(['bloodbank']),checkSchema(invoiceValidationSchema),invoiceCtrlr.create)
+
 app.listen(port,()=>
 {
     console.log('Blood-Bond-App is successfully running on the port',port)
