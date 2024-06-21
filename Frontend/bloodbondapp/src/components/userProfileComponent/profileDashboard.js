@@ -13,9 +13,7 @@ export default function ProfileDashboard() {
     const [formTitle, setFormTitle] = useState('')
     const [editProfileData, setEditProfileData] = useState(null)
     const [editUserBloodRequest,setEditUserBloodRequest]=useState(null)
-
-<<<<<<< HEAD
-    ////
+    
     const dispatch=useDispatch()
     const Profiles=useSelector((state)=>{
         return state.profiles.singleProfile
@@ -26,17 +24,14 @@ export default function ProfileDashboard() {
         {
             dispatch(startFetchingUserProfile())
         },[dispatch])
-        ///
-=======
+        
     const { bloodRequests, bloodRequestDispatch } = useContext(BloodRequestContext)
 
-    const dispatch = useDispatch()
     const singlePro = useSelector((state) => state.profiles.singleProfile)
 
     useEffect(() => {
         dispatch(startFetchingUserProfile());
     }, [dispatch]);
->>>>>>> c2c2594395a32e3d0691ab87de779a396c23e50b
 
     const handleProfileClick = () => {
         setShowProfileForm(true)

@@ -6,6 +6,8 @@ import BloodInventoryTable from "../bloodInventoryComponent/bloodInventoryTable"
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import { startFetchingBloodBank } from "../../actions/bloodbankActions"
+import BloodRequestContext from "../../contexts/bloodRequestContext"
+import { useContext } from "react"
 import { Card, Button,Container,Row,Col } from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 
@@ -13,6 +15,7 @@ export default function BloodBankDashboard() {
     const [inventory, setInventory] = useState(false)
     const [showForm, setShowForm] = useState(false)
     const [showInventoryTable, setShowInventoryTable] = useState(false)
+    const {bloodRequests,bloodRequestDispatch}=useContext(BloodRequestContext)
     const dispatch = useDispatch()
     const bloodBank = useSelector((state) => {
         return state.bloodbanks.bloodbank
@@ -33,19 +36,7 @@ export default function BloodBankDashboard() {
         return `http://localhost:3080/${formattedPath}`
     }
 
-    const handleRequests=async()=>{
-        try{
-            const response=await axios.get(`http://localhost:3080/api/blood/request/list`,{
-                headers:{
-                    'Content-Type': 'multipart/form-data',
-                    Authorization:localStorage.getItem('token')
-                }
-            })
-            console.log(response.data)
-        }catch(err){
-            console.log(err)
-        }
-    }
+    
     // const handleInventory = () => {
     //     console.log('creating inventory ....')
     //     console.log('id', id)
@@ -110,7 +101,7 @@ export default function BloodBankDashboard() {
                 </Row>
                 </Container>
                 <div>
-                    <Button className="btn btn-dark" onClick={handleRequests} as={Link} to={`/requests`} >Blood Requests</Button>
+                    <Button className="btn btn-dark"  as={Link} to={`/requests`} >Blood Requests</Button>
                 </div>
             </div>
         }))}

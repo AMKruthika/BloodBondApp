@@ -20,6 +20,9 @@ const bloodRequestReducer = (state, action) => {
                     ),
                     userBloodRequest: state.userBloodRequest && state.userBloodRequest._id === action.payload._id ? action.payload : state.userBloodRequest
                 }
+                case 'REQUESTS_BLOODBANK':{
+                    return {...state,bloodBankBloodRequests:action.payload}
+                }
             
         case 'SET_SERVER_ERRORS':
             return { ...state, serverErrors: action.payload };

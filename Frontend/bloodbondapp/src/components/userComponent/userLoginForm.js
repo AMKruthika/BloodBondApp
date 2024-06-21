@@ -1,22 +1,4 @@
-<<<<<<< HEAD
-import {useState} from 'react'
-import { Envelope,Lock } from 'react-bootstrap-icons'
-import {Container,Card,Row,Col} from 'react-bootstrap'
-import axios from 'axios'
-import UserContext from '../../contexts/userContext'
-import { useContext} from 'react'
-import { useNavigate } from 'react-router-dom'
-export default function UserLoginForm(){
-    const navigate=useNavigate()
-    const [form,setForm]=useState({
-        email:'',
-        password:''
-    })
-    const {users,userDispatch}=useContext(UserContext)
-    const handleChange=(e)=>{
-        const {name,value}=e.target
-        setForm({...form,[name]:value})
-=======
+import {Container,Row,Col,Card} from 'react-bootstrap'
 import { useState, useContext } from 'react';
 import { Envelope, Lock } from 'react-bootstrap-icons';
 import axios from 'axios';
@@ -70,7 +52,6 @@ export default function UserLoginForm() {
       userDispatch({ type: 'SET_SERVER_ERRORS', payload: [] });
     } catch (err) {
       handleErrors(err);
->>>>>>> c2c2594395a32e3d0691ab87de779a396c23e50b
     }
   };
 
@@ -80,7 +61,7 @@ export default function UserLoginForm() {
     } else {
       // Handle other types of errors
     }
-<<<<<<< HEAD
+
 }
     return(
         <div>
@@ -128,47 +109,8 @@ export default function UserLoginForm() {
                 })}
                 </ul>
             </div>):(" ")}
-=======
+            </div>
+)
   };
 
-  return (
-    <div>
-      <h2>User Login Form</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="form-label" htmlFor="email"><Envelope /> Email</label>
-          <input
-            type="text"
-            value={form.email}
-            onChange={handleChange}
-            id="email"
-            name="email"
-            className="form-control"
-          />
->>>>>>> c2c2594395a32e3d0691ab87de779a396c23e50b
-        </div>
-        <div className="form-group">
-          <label className="form-label" htmlFor="password"><Lock /> Password</label>
-          <input
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            id="password"
-            name="password"
-            className="form-control"
-          />
-        </div>
-        <input type="submit" className="btn btn-primary" />
-      </form>
-
-      {users.serverErrors && users.serverErrors.length > 0 ? (
-        <div>
-          <h4>You are prohibited from logging in due to these errors:</h4>
-          <ul>
-            {users.serverErrors.map((err, i) => <li key={i}>{err.msg}</li>)}
-          </ul>
-        </div>
-      ) : null}
-    </div>
-  );
-}
+  

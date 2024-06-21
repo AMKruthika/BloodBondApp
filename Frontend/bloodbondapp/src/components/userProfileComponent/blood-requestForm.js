@@ -50,21 +50,19 @@ export default function BloodRequestForm({ formTitle, bloodRequestData }) {
             }));
         }
     };
-
-    const handleRadioChange = (e) => {
-        const { name, value } = e.target;
-        setForm((prevForm) => ({
-            ...prevForm,
-            blood: {
-                ...prevForm.blood,
-                [name]: value
-            }
-        }));
-    };
-
     const clearForm = () => {
         setForm(initialFormState);
     };
+    const handleRadioChange = (e) => {
+        const { value } = e.target;
+        setForm((prevForm) => ({
+            ...prevForm,
+            critical: value
+        }));
+    };
+    
+    // JSX for radio buttons
+    
 
     useEffect(() => {
         if (bloodRequestData) {
@@ -230,23 +228,29 @@ export default function BloodRequestForm({ formTitle, bloodRequestData }) {
 {/* critical */}
 
 <Col md={6}>
-    <div className="form-group">
+<div className="form-group">
         <label style={{ textAlign: "left" }}>critical</label><br />
-        <input type="radio" 
-        value="yes" 
-        checked={form.critical === "yes"} 
-        onChange={handleRadioChange} 
-        id="yes" 
-        name="critical" />
+        <input
+            type="radio"
+            value="yes"
+            checked={form.critical === "yes"}
+            onChange={handleRadioChange}
+            id="yes"
+            name="critical"
+        />
         <label htmlFor="yes">yes</label>{" "}
-
-        <input type="radio" 
-        value="no" 
-        checked={form.critical === "no"} 
-        onChange={handleRadioChange} 
-        id="no" name="critical" />
+    
+        <input
+            type="radio"
+            value="no"
+            checked={form.critical === "no"}
+            onChange={handleRadioChange}
+            id="no"
+            name="critical"
+        />
         <label htmlFor="no">no</label>
     </div>
+    
 </Col>
 
 {/* requestType */}
