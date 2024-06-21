@@ -16,7 +16,6 @@ import UserContext from './contexts/userContext';
 
 import ResponseContext from './contexts/responseContext';
 import responseReducer from './reducers/responseReducer';
-import BloodRequestForm from './components/userProfileComponent/blood-requestForm';
 import bloodRequestReducer from './reducers/bloodRequestReducer';
 import BloodRequestContext from './contexts/bloodRequestContext';
 import InvoiceContext from './contexts/invoiceContext';
